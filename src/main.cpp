@@ -238,7 +238,7 @@ void flip_image(unsigned char* data, int x, int y, int n) {
         temp--;
         new_image++;
     }
-    stbi_write_jpg("./images/inverted.jpg", x, y, n, ret, 100);
+    stbi_write_jpg("./images/flipped.jpg", x, y, n, ret, 100);
     delete[] ret;
 }
 
