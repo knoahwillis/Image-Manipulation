@@ -360,7 +360,11 @@ int main() {
     std::cout << "xor the pixels - l\n";
     std::cout << "Reflect the image over the horizontal axis - m\n";
     std::cout << "All 12 - n\n";
+    int count = 0;
     while (!exit) {
+        if (count > 0) {
+            std::cout << "If you would like continue manipulating your image, simply enter the above character, or enter e to exit.\n";
+        }
         std::cin >> c;
         switch (c) {
         case 'a':
@@ -416,7 +420,7 @@ int main() {
             exit = true;
             break;
         }
-        std::cout << "If you would like continue manipulating your image, simply enter the above character, or enter e to exit.\n";
+        count++;
     }
     stbi_image_free(data);
     return 0;
