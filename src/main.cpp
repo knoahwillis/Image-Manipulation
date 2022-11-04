@@ -1,10 +1,12 @@
-#include <SDL2/SDL.h>
 #include "Functions.hpp"
-
+#include <SDL2/SDL.h>
 
 int main(int argc, char* argv[]) {
     SDL_Window* window = SDL_CreateWindow("Image Editor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, 0);
     SDL_Renderer* rend = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+    SDL_Surface* image = SDL_LoadBMP("./chicken.jpg");
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(rend, image);
 
     bool closed = false;
     bool left_down = false;
@@ -13,8 +15,8 @@ int main(int argc, char* argv[]) {
     while (!closed) {
         SDL_Event e;
 
-        SDL_SetRenderDrawColor(rend, 255, 0, 255, 0);
-        SDL_RenderClear(rend);
+        // SDL_SetRenderDrawColor(rend, 255, 255, 255, 0);
+        // SDL_RenderClear(rend);
 
         while (SDL_PollEvent(&e)) {
             switch (e.type) {
@@ -31,10 +33,13 @@ int main(int argc, char* argv[]) {
             }
         }
 
+        SDL_RenderCopy(rend, texture, NULL, NULL);
         SDL_RenderPresent(rend);
         SDL_Delay(1000 / 60);
     }
 
+    SDL_DestroyTexture(texture);
+    SDL_FreeSurface(image);
     SDL_DestroyRenderer(rend);
     SDL_DestroyWindow(window);
 
@@ -42,7 +47,6 @@ int main(int argc, char* argv[]) {
 
     return 0;
 }
-
 
 // int main() {
 //     int x, y, n;
