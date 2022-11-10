@@ -6,10 +6,10 @@
 
 // loading a file into the program
 unsigned char* load_image(int* x, int* y, int* n) {
-    std::string f;
-    std::cout << "Please enter the path of the image (.jpg) you would like to manipulate:\n";
-    std::cin >> f;
-    unsigned char* ret = stbi_load(f.c_str(), x, y, n, 3);
+    // std::string f;
+    // // std::cout << "Please enter the path of the image (.jpg) you would like to manipulate:\n";
+    // std::cin >> f;
+    unsigned char* ret = stbi_load("./test.jpg", x, y, n, 3);
     return ret;
 }
 
@@ -56,28 +56,27 @@ void recolor_image(unsigned char* data, int x, int y, int n) {
     unsigned char* temp = data;
     unsigned char* new_image = new unsigned char[x * y * n];
     unsigned char* ret = new_image;
-    // these values can be replaced with the RGB values of any color, ruby is used here
-    unsigned char ruby_r = 0xE0;
-    unsigned char ruby_g = 0x11;
-    unsigned char ruby_b = 0x5F;
-    for (int i = 0; i < x * y; i++) {
-        for (int j = 0; j < 3; j++) {
-            switch (j) {
-            case 0:
-                *new_image = *temp & ruby_r;
-                break;
-            case 1:
-                *new_image = *temp & ruby_g;
-                break;
-            case 2:
-                *new_image = *temp & ruby_b;
-                break;
-            }
-            temp++;
-            new_image++;
-        }
+    for(int i = 0; i < x * y; i++) {
+        unsigned char r = *temp;
+        temp++;
+        unsigned char g = *temp;
+        temp++;
+        unsigned char b = *temp;
+        temp++;
+        float y = ((static_cast<float>(r) / 255) + (static_cast<float>(g) / 255)) / 2;
+        float o = ((static_cast<float>(r) / 255) + ((static_cast<float>(g) / 2) / 255)) / 2;
+        float p = ((static_cast<float>(b) / 255) + (static_cast<float>(r) / 255)) / 2;
+        y *= 255;
+        o *= 255;
+        p *= 255;
+        *new_image = static_cast<unsigned char>(o);
+        new_image++;
+        *new_image = static_cast<unsigned char>(y);
+        new_image++;
+        *new_image = static_cast<unsigned char>(p);
+        new_image++;
     }
-    stbi_write_jpg("./images/shaded.jpg", x, y, n, ret, 100);
+    stbi_write_jpg("./images/recolored.jpg", x, y, n, ret, 100);
     delete[] ret;
 }
 
