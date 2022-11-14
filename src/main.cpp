@@ -5,8 +5,10 @@
 int main(int argc, char* argv[]) {
     int x, y, n;
     unsigned char* data = load_image(&x, &y, &n);
-    SDL_Window* window = SDL_CreateWindow("Image Editor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, x, y, 0);
+    SDL_Window* window = SDL_CreateWindow("Image Editor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, x, y, SDL_WINDOW_FULLSCREEN);
     SDL_Renderer* rend = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+    SDL_surface_h_
 
     bool closed = false;
 
