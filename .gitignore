@@ -32,3 +32,4 @@
 *.app
 
 image.jpg
+.DS_Store
