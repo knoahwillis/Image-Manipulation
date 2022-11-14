@@ -104,7 +104,7 @@ int main(int argc, char* argv[]) {
                         }
                     } else if (e.button.y >= button_rects[6].y && e.button.y <= button_rects[6].y + button_rects[6].h) {
                         if (e.button.x >= button_rects[6].x && e.button.x <= button_rects[6].x + button_rects[6].w) {
-                            flip_image(data, x, y, n);
+                            data = flip_image(data, x, y, n);
 
                         } else if (e.button.x >= button_rects[7].x && e.button.x <= button_rects[7].x + button_rects[7].w) {
                             shade_image(data, x, y, n);
@@ -119,7 +119,7 @@ int main(int argc, char* argv[]) {
                             b_xor(data, x, y, n);
 
                         } else if (e.button.x >= button_rects[11].x && e.button.x <= button_rects[11].x + button_rects[11].w) {
-                            reflect(data, x, y, n);
+                            data = reflect(data, x, y, n);
                         }
                     }
                     break;

@@ -17,7 +17,7 @@ void divide_image(unsigned char* data, int x, int y, int n);
 
 void swap_quadrants(unsigned char* data, int x, int y, int n);
 
-void flip_image(unsigned char* data, int x, int y, int n);
+unsigned char* flip_image(unsigned char* data, int x, int y, int n);
 
 void shade_image(unsigned char* data, int x, int y, int n);
 
@@ -27,6 +27,6 @@ void and_randomize_image(unsigned char* data, int x, int y, int n);
 
 void b_xor(unsigned char* data, int x, int y, int n);
 
-void reflect(unsigned char* data, int x, int y, int n);
+unsigned char* reflect(unsigned char* data, int x, int y, int n);
 
 void del_image_data(unsigned char* data);

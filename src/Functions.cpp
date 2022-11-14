@@ -186,11 +186,11 @@ void swap_quadrants(unsigned char* data, int x, int y, int n) {
     delete[] q4;
 }
 
-
-// I DONT THINK THIS WILL WORK -- dosent, acts weird ??
 // rotate the image by pi/2 radians (part g)
-void flip_image(unsigned char* data, int x, int y, int n) {
+unsigned char* flip_image(unsigned char* data, int x, int y, int n) {
     unsigned char* temp = data;
+    unsigned char* new_image = new unsigned char[x * y * n];
+    unsigned char* ret = new_image;
     for (int i = 0; i < x * y * n; i++) {
         temp++;
     }
@@ -199,13 +199,17 @@ void flip_image(unsigned char* data, int x, int y, int n) {
         r = *(temp - 2);
         g = *(temp - 1);
         b = *(temp);
-        *temp = b;
+        *new_image = b;
         temp--;
-        *temp = r;
+        new_image++;
+        *new_image = r;
         temp--;
-        *temp = g;
+        new_image++;
+        *new_image = g;
         temp--;
+        new_image++;
     }
+    return ret;
 }
 
 // draw the image in shades of ruby (part h)
@@ -262,26 +266,28 @@ void b_xor(unsigned char* data, int x, int y, int n) {
     }
 }
 
-// THIS ONE ALSO WONT WORK -- dosent
 // reflect the image over the vertical axis (part l)
-void reflect(unsigned char* data, int x, int y, int n) {
+unsigned char* reflect(unsigned char* data, int x, int y, int n) {
     unsigned char* temp = data;
+    unsigned char* new_image = new unsigned char[x * y * n];
+    unsigned char* ret = new_image;
     for (int j = 0; j < y; j++) {
         temp += x * 3;
         for (int i = 0; i < x; i++) {
-            temp += 2;
+            new_image += 2;
             temp--;
-            *temp = *temp;
+            *new_image = *temp;
             temp--;
+            new_image--;
+            *new_image = *temp;
+            new_image--;
             temp--;
-            *temp = *temp;
-            temp--;
-            temp--;
-            *temp = *temp;
-            temp += 3;
+            *new_image = *temp;
+            new_image += 3;
         }
         temp += x * 3;
     }
+    return ret;
 }
 
 void del_image_data(unsigned char* data) {
