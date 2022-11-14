@@ -9,53 +9,39 @@ unsigned char* load_image(int* x, int* y, int* n) {
     // std::string f;
     // // std::cout << "Please enter the path of the image (.jpg) you would like to manipulate:\n";
     // std::cin >> f;
-    unsigned char* ret = stbi_load("./test.jpg", x, y, n, 3);
+    unsigned char* ret = stbi_load("./slug.jpg", x, y, n, 3);
     return ret;
 }
 
 // blur the image (part a)
 void blur_image(unsigned char* data, int x, int y, int n) {
     unsigned char* temp = data;
-    unsigned char* new_image = new unsigned char[x * y * n];
-    unsigned char* ret = new_image;
     for (int i = 0; i < x * y * n; i++) {
-        *new_image = *temp & 0xF0;
+        *temp = *temp & 0xF0;
         temp++;
-        new_image++;
     }
-    stbi_write_jpg("./images/blurred.jpg", x, y, n, ret, 100);
-    delete[] ret;
 }
 
 // replace each green with blue, blue with red, red with green (part b)
 void color_swap(unsigned char* data, int x, int y, int n) {
     unsigned char* temp = data;
-    unsigned char* new_image = new unsigned char[x * y * n];
-    unsigned char* ret = new_image;
     unsigned char r, g, b;
     for (int i = 0; i < x * y; i++) {
         r = *temp;
         g = *(temp + 1);
         b = *(temp + 2);
-        *new_image = g;
+        *temp = g;
         temp++;
-        new_image++;
-        *new_image = b;
+        *temp = b;
         temp++;
-        new_image++;
-        *new_image = r;
+        *temp = r;
         temp++;
-        new_image++;
     }
-    stbi_write_jpg("./images/color_swap.jpg", x, y, n, ret, 100);
-    delete[] ret;
 }
 
 // (part c)
 void recolor_image(unsigned char* data, int x, int y, int n) {
     unsigned char* temp = data;
-    unsigned char* new_image = new unsigned char[x * y * n];
-    unsigned char* ret = new_image;
     for(int i = 0; i < x * y; i++) {
         unsigned char r = *temp;
         temp++;
@@ -69,42 +55,33 @@ void recolor_image(unsigned char* data, int x, int y, int n) {
         y *= 255;
         o *= 255;
         p *= 255;
-        *new_image = static_cast<unsigned char>(o);
-        new_image++;
-        *new_image = static_cast<unsigned char>(y);
-        new_image++;
-        *new_image = static_cast<unsigned char>(p);
-        new_image++;
+        temp -= 3;
+        *temp = static_cast<unsigned char>(o);
+        temp++;
+        *temp = static_cast<unsigned char>(y);
+        temp++;
+        *temp = static_cast<unsigned char>(p);
+        temp++;
     }
-    stbi_write_jpg("./images/recolored.jpg", x, y, n, ret, 100);
-    delete[] ret;
 }
 
 // randomize the intensity of each pixel (part d)
 void randomize_image(unsigned char* data, int x, int y, int n) {
     srand(time(NULL));
-    unsigned char* new_image = new unsigned char[x * y * n];
-    unsigned char* ret = new_image;
+    unsigned char* temp = data;
     for (int i = 0; i < x * y * n; i++) {
-        *new_image = rand() % 255 + 1;
-        new_image++;
+        *temp = rand() % 255 + 1;
+        temp++;
     }
-    stbi_write_jpg("./images/randomized.jpg", x, y, n, ret, 100);
-    delete[] ret;
 }
 
 // divide the color of each pixel in half (part e)
 void divide_image(unsigned char* data, int x, int y, int n) {
     unsigned char* temp = data; 
-    unsigned char* new_image = new unsigned char[x * y * n];
-    unsigned char* ret = new_image;
     for (int i = 0; i < x * y * n; i++) {
-        *new_image = *temp >> 1;
+        *temp = *temp >> 1;
         temp++;
-        new_image++;
     }
-    stbi_write_jpg("./images/divided.jpg", x, y, n, ret, 100);
-    delete[] ret;
 }
 
 // swap quadrans I and III, II and IV (part f)
@@ -161,8 +138,7 @@ void swap_quadrants(unsigned char* data, int x, int y, int n) {
 
     // second loop to swap them
 
-    unsigned char* new_image = new unsigned char[x * y * n];
-    unsigned char* ret = new_image;
+    temp = data;
     tq1 = q1;
     tq2 = q2;
     tq3 = q3;
@@ -172,32 +148,32 @@ void swap_quadrants(unsigned char* data, int x, int y, int n) {
             // q2
             if (i >= 0 && i < half_x && j >= 0 && j < half_y) {
                 for (int k = 0; k < 3; k++) {
-                    *new_image = *tq4;
-                    new_image++;
+                    *temp = *tq4;
+                    temp++;
                     tq4++;
                 }
             }
             // q1
             else if (i >= half_x && j >= 0 && j < half_y) {
                 for (int k = 0; k < 3; k++) {
-                    *new_image = *tq3;
-                    new_image++;
+                    *temp = *tq3;
+                    temp++;
                     tq3++;
                 }
             }
             // q3
             else if (i >= 0 && i < half_x && j >= half_y) {
                 for (int k = 0; k < 3; k++) {
-                    *new_image = *tq1;
-                    new_image++;
+                    *temp = *tq1;
+                    temp++;
                     tq1++;
                 }
             }
             // q4
             else {
                 for (int k = 0; k < 3; k++) {
-                    *new_image = *tq2;
-                    new_image++;
+                    *temp = *tq2;
+                    temp++;
                     tq2++;
                 }
             }
@@ -208,15 +184,13 @@ void swap_quadrants(unsigned char* data, int x, int y, int n) {
     delete[] q2;
     delete[] q3;
     delete[] q4;
-    stbi_write_jpg("./images/swapped.jpg", x, y, n, ret, 100);
-    delete[] ret;
 }
 
+
+// I DONT THINK THIS WILL WORK -- dosent, acts weird ??
 // rotate the image by pi/2 radians (part g)
 void flip_image(unsigned char* data, int x, int y, int n) {
     unsigned char* temp = data;
-    unsigned char* new_image = new unsigned char[x * y * n];
-    unsigned char* ret = new_image;
     for (int i = 0; i < x * y * n; i++) {
         temp++;
     }
@@ -225,25 +199,18 @@ void flip_image(unsigned char* data, int x, int y, int n) {
         r = *(temp - 2);
         g = *(temp - 1);
         b = *(temp);
-        *new_image = b;
+        *temp = b;
         temp--;
-        new_image++;
-        *new_image = r;
+        *temp = r;
         temp--;
-        new_image++;
-        *new_image = g;
+        *temp = g;
         temp--;
-        new_image++;
     }
-    stbi_write_jpg("./images/flipped.jpg", x, y, n, ret, 100);
-    delete[] ret;
 }
 
 // draw the image in shades of ruby (part h)
 void shade_image(unsigned char* data, int x, int y, int n) {
     unsigned char* temp = data;
-    unsigned char* new_image = new unsigned char[x * y * n];
-    unsigned char* ret = new_image;
     // these values can be replaced with the RGB values of any color, ruby is used here
     unsigned char ruby_r = 0xE0;
     unsigned char ruby_g = 0x11;
@@ -252,90 +219,69 @@ void shade_image(unsigned char* data, int x, int y, int n) {
         for (int j = 0; j < 3; j++) {
             switch (j) {
             case 0:
-                *new_image = *temp & ruby_r;
+                *temp = *temp & ruby_r;
                 break;
             case 1:
-                *new_image = *temp & ruby_g;
+                *temp = *temp & ruby_g;
                 break;
             case 2:
-                *new_image = *temp & ruby_b;
+                *temp = *temp & ruby_b;
                 break;
             }
             temp++;
-            new_image++;
         }
     }
-    stbi_write_jpg("./images/shaded.jpg", x, y, n, ret, 100);
-    delete[] ret;
 }
 
 // create the negative of the image (part i)
 void invert_image(unsigned char* data, int x, int y, int n) {
     unsigned char* temp = data;
-    unsigned char* new_image = new unsigned char[x * y * n];
-    unsigned char* ret = new_image;
     for (int i = 0; i < x * y * n; i++) {
-        *new_image = ~(*temp);
+        *temp = ~(*temp);
         temp++;
-        new_image++;
     }
-    stbi_write_jpg("./images/inverted.jpg", x, y, n, ret, 100);
-    delete[] ret;
 }
 
 // create a random char, then bitwise and the pixel and that char (part j)
 void and_randomize_image(unsigned char* data, int x, int y, int n) {
     srand(time(NULL));
     unsigned char* temp = data;
-    unsigned char* new_image = new unsigned char[x * y * n];
-    unsigned char* ret = new_image;
     for (int i = 0; i < x * y * n; i++) {
-        *new_image = *temp & (rand() % 255 + 1);
+        *temp = *temp & (rand() % 255 + 1);
         temp++;
-        new_image++;
     }
-    stbi_write_jpg("./images/andrandomized.jpg", x, y, n, ret, 100);
-    delete[] ret;
 }
 
 // xor each color with the char 'B' for my favorite computer science professor
 // who taught me all about xor (part k)
 void b_xor(unsigned char* data, int x, int y, int n) {
     unsigned char* temp = data;
-    unsigned char* new_image = new unsigned char[x * y * n];
-    unsigned char* ret = new_image;
     for (int i = 0; i < x * y * n; i++) {
-        *new_image = *temp ^ 'B';
+        *temp = *temp ^ 'B';
         temp++;
-        new_image++;
     }
-    stbi_write_jpg("./images/b_xor.jpg", x, y, n, ret, 100);
-    delete[] ret;
 }
 
+// THIS ONE ALSO WONT WORK -- dosent
 // reflect the image over the vertical axis (part l)
 void reflect(unsigned char* data, int x, int y, int n) {
     unsigned char* temp = data;
-    unsigned char* new_image = new unsigned char[x * y * n];
-    unsigned char* ret = new_image;
     for (int j = 0; j < y; j++) {
         temp += x * 3;
         for (int i = 0; i < x; i++) {
-            new_image += 2;
+            temp += 2;
             temp--;
-            *new_image = *temp;
+            *temp = *temp;
             temp--;
-            new_image--;
-            *new_image = *temp;
-            new_image--;
             temp--;
-            *new_image = *temp;
-            new_image += 3;
+            *temp = *temp;
+            temp--;
+            temp--;
+            *temp = *temp;
+            temp += 3;
         }
         temp += x * 3;
     }
-    stbi_write_jpg("./images/reflected.jpg", x, y, n, ret, 100);
-    delete[] ret;
 }
 
 void del_image_data(unsigned char* data) {
