@@ -9,7 +9,7 @@ unsigned char* load_image(int* x, int* y, int* n) {
     // std::string f;
     // // std::cout << "Please enter the path of the image (.jpg) you would like to manipulate:\n";
     // std::cin >> f;
-    unsigned char* ret = stbi_load("./slug.jpg", x, y, n, 3);
+    unsigned char* ret = stbi_load("./image.jpg", x, y, n, 3);
     return ret;
 }
 

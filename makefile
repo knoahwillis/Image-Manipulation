@@ -8,7 +8,7 @@ CC := g++
 
 CXXFLAGS += -std=c++17 -O2 -g
 LDLIBS += 
-LDFLAGS += -lSDL2 -lSDL2_image
+LDFLAGS += -lSDL2 -lSDL2_image -lSDl2_ttf
 
 .PHONY: all make_build_dirs clean
 
