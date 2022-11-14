@@ -11,6 +11,9 @@ int main(int argc, char* argv[]) {
     int x, y, n;
     unsigned char* data = load_image(&x, &y, &n);
 
+    unsigned char* originalData = new unsigned char[x * y * n];
+    memcpy(originalData, data, x * y * n);
+
     SDL_Window* window = SDL_CreateWindow("Image Editor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1080, 720, 0);
     SDL_Renderer* rend = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     TTF_Font* Titles = TTF_OpenFont("./Sans.ttf", 24);
@@ -67,9 +70,6 @@ int main(int argc, char* argv[]) {
     }
 
     SDL_Rect reset_button_rect = {350, 0, 100, 100};
-
-    unsigned char* originalData = new unsigned char[x * y * n];
-    memcpy(originalData, data, x * y * n);
     while (!closed) {
         SDL_Event e;
         SDL_RenderClear(rend);
@@ -130,7 +130,7 @@ int main(int argc, char* argv[]) {
                         }
                     } else if (e.button.y >= reset_button_rect.y && e.button.y <= reset_button_rect.y + reset_button_rect.h &&
                                e.button.x >= reset_button_rect.x && e.button.x <= reset_button_rect.x + reset_button_rect.w) {
-                        data = originalData;
+                        memcpy(data, originalData, x * y * n);
                     }
                     break;
                 }
@@ -171,6 +171,7 @@ int main(int argc, char* argv[]) {
     SDL_Quit();
 
     del_image_data(data);
+    delete[] originalData;
 
     return 0;
 }
