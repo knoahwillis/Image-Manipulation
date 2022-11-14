@@ -37,10 +37,8 @@ int main(int argc, char* argv[]) {
     bool closed = false;
 
     SDL_Texture* original_texture = SDL_CreateTextureFromSurface(rend, original_image_surface);
-    // SDL_Texture* new_texture = SDL_CreateTextureFromSurface(rend, new_image_surface);
 
     SDL_Rect original_image = {0, original_text->h, x / 2, y / 2};
-    // SDL_Rect new_image = {700, original_text->h, x / 2, y / 2};
 
     SDL_Texture* original_text_texture = SDL_CreateTextureFromSurface(rend, original_text);
     SDL_Texture* new_text_texture = SDL_CreateTextureFromSurface(rend, new_text);
@@ -63,11 +61,6 @@ int main(int argc, char* argv[]) {
             count++;
         }
     }
-
-    // for (int i = 0; i < 12; i++) {
-    //     std::cout << button_rects[i].x << " " << button_rects[i].x + button_rects[i].w << " " << button_rects[i].y << " " << button_rects[i].y +
-    //     button_rects[i].h << "\n";
-    // }
 
     while (!closed) {
         SDL_Event e;
