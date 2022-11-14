@@ -34,6 +34,8 @@ int main(int argc, char* argv[]) {
         TTF_RenderText_Solid(Buttons, "Special XOR", White), TTF_RenderText_Solid(Buttons, "Reflect", White),
     };
 
+    SDL_Surface* reset_button_surface = TTF_RenderText_Solid(Buttons, "Reset", White);
+
     bool closed = false;
 
     SDL_Texture* original_texture = SDL_CreateTextureFromSurface(rend, original_image_surface);
@@ -51,6 +53,8 @@ int main(int argc, char* argv[]) {
         button_textures[i] = SDL_CreateTextureFromSurface(rend, button_surfaces[i]);
     }
 
+    SDL_Texture* reset_button_texture = SDL_CreateTextureFromSurface(rend, reset_button_surface);
+
     const int button_width = 100;
     const int button_height = 100;
     std::array<SDL_Rect, 12> button_rects;
@@ -62,9 +66,12 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    SDL_Rect reset_button_rect = {350, 0, 100, 100};
+
+    unsigned char* originalData = new unsigned char[x * y * n];
+    memcpy(originalData, data, x * y * n);
     while (!closed) {
         SDL_Event e;
-
         SDL_RenderClear(rend);
 
         SDL_Texture* new_texture = SDL_CreateTextureFromSurface(rend, new_image_surface);
@@ -121,6 +128,9 @@ int main(int argc, char* argv[]) {
                         } else if (e.button.x >= button_rects[11].x && e.button.x <= button_rects[11].x + button_rects[11].w) {
                             data = reflect(data, x, y, n);
                         }
+                    } else if (e.button.y >= reset_button_rect.y && e.button.y <= reset_button_rect.y + reset_button_rect.h &&
+                               e.button.x >= reset_button_rect.x && e.button.x <= reset_button_rect.x + reset_button_rect.w) {
+                        data = originalData;
                     }
                     break;
                 }
@@ -137,6 +147,8 @@ int main(int argc, char* argv[]) {
         for (int i = 0; i < 12; i++) {
             SDL_RenderCopy(rend, button_textures[i], NULL, &button_rects[i]);
         }
+
+        SDL_RenderCopy(rend, reset_button_texture, NULL, &reset_button_rect);
 
         SDL_RenderPresent(rend);
         SDL_Delay(1000 / 60);
